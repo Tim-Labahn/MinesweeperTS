@@ -9,6 +9,7 @@ let width = 23;
 let height = 11;
 //------------------------
 function game() {
+
   checkSize();
   gameMap = [];
   generateField();
@@ -148,8 +149,8 @@ function placeFlag(yIndex: number, xIndex: number) {
 function lost(yIndex: number, xIndex: number) {
   for (let k = 0; k < height; k++) {
     if (gameMap[yIndex][xIndex].isBomb === true) {
-      game();
-      const dialog = document.querySelector('dialog');
+   
+      const dialog = document.querySelector('.restartGame')as HTMLDialogElement;
       if (dialog) {
         dialog.showModal();
       }
@@ -207,12 +208,18 @@ function checkArea(x: number, y: number) {
     tileClick(x + 1, y);
   }
 }
-
+function startGame(){
 const options = document.querySelector('.start') as HTMLDialogElement;
 options.showModal();
+}
+
+startGame()
+
 declare global {
   interface Window {
     game: Function;
+    startGame: Function;
   }
 }
 window.game = game;
+window.startGame = startGame;
