@@ -206,6 +206,6 @@ function checkArea(x, y) {
   }
 }
 
-/** @ts-expect-error @type HTMLDialogElement */
 const options = document.querySelector('.start');
 options.showModal();
+window.game=game

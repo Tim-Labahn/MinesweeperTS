@@ -10,23 +10,22 @@
     <h1>Minesweeper</h1>
     <h4>PLACE FLAGS WITH RIGHT CLICK</h4>
     <div class="field"></div>
+    <dialog class="start">
+      <p>Pick the Map Size!</p>
+      <select name="map-größen" id="map-größen">
+        <option value="small">Small</option>
+        <option value="medium">Medium</option>
+        <option value="large">Large</option>
+      </select>
+      <button class="pickSize" onclick="document.querySelector('.start').close(); game() ">Submit</button>
+    </dialog>
     <dialog>
       <p>YOU LOST</p>
-      <button
-        class="restart"
-        onclick="document.querySelector('dialog').close()"
-      >
-        Restart
-      </button>
+      <button class="restart" onclick="document.querySelector('dialog').close()">Restart</button>
     </dialog>
     <dialog class="winText">
       <p>YOU WON</p>
-      <button
-        class="newGame"
-        onclick="document.querySelector('dialog').close()"
-      >
-        New Game
-      </button>
+      <button class="newGame" onclick="document.querySelector('dialog').close()">New Game</button>
     </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>
