@@ -69,3 +69,13 @@ button:hover{
   background-color: #e2dcdc;
 }
 
+.start{
+  width: 25vh;
+}
+select{
+  width: 23vh;
+}
+
+.pickSize{
+  width: 23vh;
+}
