@@ -5,8 +5,9 @@ type GameMap = {
   isOpen: boolean;
 }[][];
 let gameMap: GameMap = [];
-let width = 23;
-let height = 11;
+let width: number;
+let height: number;
+let difficulty: number;
 //------------------------
 function game() {
   checkSize();
@@ -34,9 +35,9 @@ function generateField() {
 
 function generateBomb() {
   for (let i = 0; i < width; i++) {
-    gameMap[i][Math.round(Math.random() * (height - 1))].isBomb = true;
-    gameMap[i][Math.round(Math.random() * (height - 1))].isBomb = true;
-    gameMap[i][Math.round(Math.random() * (height - 1))].isBomb = true;
+    for (let k = 0; k < difficulty; k++) {
+      gameMap[i][Math.round(Math.random() * (height - 1))].isBomb = true;
+    }
   }
   gameMap[Math.floor(width / 2)][Math.floor(height / 2)].isBomb = false;
   gameMap[Math.floor(width / 2)][Math.floor(height / 2 - 1)].isBomb = false;
@@ -146,16 +147,15 @@ function placeFlag(yIndex: number, xIndex: number) {
 }
 
 function lost(yIndex: number, xIndex: number) {
-  for (let k = 0; k < height; k++) {
-    if (gameMap[yIndex][xIndex].isBomb === true) {
-      game();
-      const dialog = document.querySelector('dialog');
-      if (dialog) {
-        dialog.showModal();
-      }
+  if (gameMap[yIndex][xIndex].isBomb === true) {
+    game();
+    const dialog = document.querySelector('dialog');
+    if (dialog) {
+      dialog.showModal();
     }
   }
 }
+
 function checkWin() {
   if (gameMap.every(a => a.every(b => b.isOpen === true || b.isBomb === true))) {
     const winText = document.querySelector('.winText') as HTMLDialogElement;
@@ -172,12 +172,15 @@ function checkSize() {
     if (gameMapSize.value === 'small') {
       width = 11;
       height = 9;
+      difficulty = 2;
     } else if (gameMapSize.value === 'medium') {
       width = 23;
       height = 11;
+      difficulty = 3;
     } else {
       width = 37;
       height = 15;
+      difficulty = 5;
     }
   }
 }
