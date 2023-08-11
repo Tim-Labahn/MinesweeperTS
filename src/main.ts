@@ -210,12 +210,18 @@ function checkArea(x: number, y: number) {
     tileClick(x + 1, y);
   }
 }
+function startGame() {
+  const options = document.querySelector('.start') as HTMLDialogElement;
+  options.showModal();
+}
 
-const options = document.querySelector('.start') as HTMLDialogElement;
-options.showModal();
+startGame();
+
 declare global {
   interface Window {
     game: Function;
+    startGame: Function;
   }
 }
 window.game = game;
+window.startGame = startGame;
