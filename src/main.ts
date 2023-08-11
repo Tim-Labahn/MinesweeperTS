@@ -52,28 +52,28 @@ function generateBomb() {
 
 function countBombs(y: number, x: number) {
   let numberOfBombs = 0;
-  if (gameMap[y + 1]?.[x]?.isBomb === true) {
+  if (gameMap[y + 1]?.[x]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y - 1]?.[x]?.isBomb === true) {
+  if (gameMap[y - 1]?.[x]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y]?.[x + 1]?.isBomb === true) {
+  if (gameMap[y]?.[x + 1]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y]?.[x - 1]?.isBomb === true) {
+  if (gameMap[y]?.[x - 1]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y + 1]?.[x + 1]?.isBomb === true) {
+  if (gameMap[y + 1]?.[x + 1]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y - 1]?.[x + 1]?.isBomb === true) {
+  if (gameMap[y - 1]?.[x + 1]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y - 1]?.[x - 1]?.isBomb === true) {
+  if (gameMap[y - 1]?.[x - 1]?.isBomb) {
     numberOfBombs++;
   }
-  if (gameMap[y + 1]?.[x - 1]?.isBomb === true) {
+  if (gameMap[y + 1]?.[x - 1]?.isBomb) {
     numberOfBombs++;
   }
 
@@ -93,15 +93,17 @@ function render() {
       if (x === Math.floor(width / 2) && y === Math.floor(height / 2)) {
         tile.setAttribute('isMiddle', 'middle');
       }
-      tile.onclick = () => tileClick(x, y);
+      tile.onclick = () => {
+        tileClick(x, y);
+      };
       tile.oncontextmenu = e => {
         e.preventDefault();
         placeFlag(x, y);
       };
       gameField?.appendChild(tile);
-      if (gameMap[x][y].isOpen === true) {
+      if (gameMap[x][y].isOpen) {
         tile.setAttribute('isOpen', 'open');
-        if (gameMap[x][y].isBomb === true) {
+        if (gameMap[x][y].isBomb) {
           tile.innerHTML = '💣';
         } else {
           tile.innerHTML = `${countBombs(x, y)}`;
@@ -111,8 +113,8 @@ function render() {
             }, 200);
           }
         }
-      } else if (gameMap[x][y].isOpen === false) {
-        if (gameMap[x][y].isFlag === true) {
+      } else if (!gameMap[x][y].isOpen) {
+        if (gameMap[x][y].isFlag) {
           tile.innerHTML = '🚩';
         } else {
           tile.innerHTML = '';
@@ -123,13 +125,13 @@ function render() {
 }
 
 function tileClick(yIndex: number, xIndex: number) {
-  if (gameMap[yIndex][xIndex].isFlag === true) {
+  if (gameMap[yIndex][xIndex].isFlag) {
     return;
   }
-  if (gameMap[yIndex][xIndex].isBomb === true) {
+  if (gameMap[yIndex][xIndex].isBomb) {
     lost(yIndex, xIndex);
   } else {
-    if (gameMap[yIndex][xIndex].isOpen === false) {
+    if (!gameMap[yIndex][xIndex].isOpen) {
       gameMap[yIndex][xIndex].isOpen = true;
       render();
     }
@@ -138,7 +140,7 @@ function tileClick(yIndex: number, xIndex: number) {
 }
 
 function placeFlag(yIndex: number, xIndex: number) {
-  if (gameMap[yIndex][xIndex].isFlag === false) {
+  if (!gameMap[yIndex][xIndex].isFlag) {
     gameMap[yIndex][xIndex].isFlag = true;
   } else {
     gameMap[yIndex][xIndex].isFlag = false;
@@ -147,7 +149,7 @@ function placeFlag(yIndex: number, xIndex: number) {
 }
 
 function lost(yIndex: number, xIndex: number) {
-  if (gameMap[yIndex][xIndex].isBomb === true) {
+  if (gameMap[yIndex][xIndex].isBomb) {
     game();
     const dialog = document.querySelector('dialog');
     if (dialog) {
@@ -157,12 +159,10 @@ function lost(yIndex: number, xIndex: number) {
 }
 
 function checkWin() {
-  if (gameMap.every(a => a.every(b => b.isOpen === true || b.isBomb === true))) {
+  if (gameMap.every(a => a.every(b => b.isOpen || b.isBomb))) {
     const winText = document.querySelector('.winText') as HTMLDialogElement;
-    if (winText) {
-      winText.showModal();
-      game();
-    }
+    winText.showModal();
+    game();
   }
 }
 
@@ -185,28 +185,28 @@ function checkSize() {
   }
 }
 function checkArea(x: number, y: number) {
-  if (gameMap[x + 0]?.[y + 1]?.isOpen === false) {
+  if (!gameMap[x + 0]?.[y + 1]?.isOpen) {
     tileClick(x, y + 1);
   }
-  if (gameMap[x + 0]?.[y - 1]?.isOpen === false) {
+  if (!gameMap[x + 0]?.[y - 1]?.isOpen) {
     tileClick(x, y - 1);
   }
-  if (gameMap[x + 1]?.[y + 1]?.isOpen === false) {
+  if (!gameMap[x + 1]?.[y + 1]?.isOpen) {
     tileClick(x + 1, y + 1);
   }
-  if (gameMap[x + 1]?.[y - 1]?.isOpen === false) {
+  if (!gameMap[x + 1]?.[y - 1]?.isOpen) {
     tileClick(x + 1, y - 1);
   }
-  if (gameMap[x - 1]?.[y + 1]?.isOpen === false) {
+  if (!gameMap[x - 1]?.[y + 1]?.isOpen) {
     tileClick(x - 1, y + 1);
   }
-  if (gameMap[x - 1]?.[y - 1]?.isOpen === false) {
+  if (!gameMap[x - 1]?.[y - 1]?.isOpen) {
     tileClick(x - 1, y - 1);
   }
-  if (gameMap[x - 1]?.[y + 0]?.isOpen === false) {
+  if (!gameMap[x - 1]?.[y + 0]?.isOpen) {
     tileClick(x - 1, y);
   }
-  if (gameMap[x + 1]?.[y + 0]?.isOpen === false) {
+  if (!gameMap[x + 1]?.[y + 0]?.isOpen) {
     tileClick(x + 1, y);
   }
 }
@@ -219,8 +219,8 @@ startGame();
 
 declare global {
   interface Window {
-    game: Function;
-    startGame: Function;
+    game: () => void;
+    startGame: () => void;
   }
 }
 window.game = game;
