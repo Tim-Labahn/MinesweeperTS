@@ -1,5 +1,10 @@
-import './style.css'
-let gameMap = [];
+import './style.css';
+type GameMap = {
+  isBomb: boolean;
+  isFlag: boolean;
+  isOpen: boolean;
+}[][];
+let gameMap: GameMap = [];
 let width = 23;
 let height = 11;
 //------------------------
@@ -44,7 +49,7 @@ function generateBomb() {
   gameMap[Math.floor(width / 2 + 1)][Math.floor(height / 2 + 1)].isBomb = false;
 }
 
-function countBombs(y, x) {
+function countBombs(y: number, x: number) {
   let numberOfBombs = 0;
   if (gameMap[y + 1]?.[x]?.isBomb === true) {
     numberOfBombs++;
@@ -116,7 +121,7 @@ function render() {
   }
 }
 
-function tileClick(yIndex, xIndex) {
+function tileClick(yIndex: number, xIndex: number) {
   if (gameMap[yIndex][xIndex].isFlag === true) {
     return;
   }
@@ -131,7 +136,7 @@ function tileClick(yIndex, xIndex) {
   checkWin();
 }
 
-function placeFlag(yIndex, xIndex) {
+function placeFlag(yIndex: number, xIndex: number) {
   if (gameMap[yIndex][xIndex].isFlag === false) {
     gameMap[yIndex][xIndex].isFlag = true;
   } else {
@@ -140,46 +145,43 @@ function placeFlag(yIndex, xIndex) {
   render();
 }
 
-function lost(yIndex, xIndex) {
-  // for (let i = 0; i < width; i++) {
-  //   for (let k = 0; k < height; k++) {
-  //     tileClick(k, i);
-  //   }
-  // }
+function lost(yIndex: number, xIndex: number) {
   for (let k = 0; k < height; k++) {
     if (gameMap[yIndex][xIndex].isBomb === true) {
       game();
       const dialog = document.querySelector('dialog');
-      /** @ts-expect-error @type HTMLDialogElement */
-      dialog.showModal();
+      if (dialog) {
+        dialog.showModal();
+      }
     }
   }
 }
 function checkWin() {
   if (gameMap.every(a => a.every(b => b.isOpen === true || b.isBomb === true))) {
-    const winText = document.querySelector('.winText');
-    /** @ts-expect-error @type HTMLDialogElement */
-    winText.showModal();
-    game();
+    const winText = document.querySelector('.winText') as HTMLDialogElement;
+    if (winText) {
+      winText.showModal();
+      game();
+    }
   }
 }
 
 function checkSize() {
-  /** @ts-expect-error @type HTMLSelectElement */
   const gameMapSize = document.querySelector('select');
-  if (gameMapSize.value === 'small') {
-    width = 11;
-    height = 9;
-  } else if (gameMapSize.value === 'medium') {
-    width = 23;
-    height = 11;
-  } else {
-    width = 37;
-    height = 15;
+  if (gameMapSize) {
+    if (gameMapSize.value === 'small') {
+      width = 11;
+      height = 9;
+    } else if (gameMapSize.value === 'medium') {
+      width = 23;
+      height = 11;
+    } else {
+      width = 37;
+      height = 15;
+    }
   }
 }
-
-function checkArea(x, y) {
+function checkArea(x: number, y: number) {
   if (gameMap[x + 0]?.[y + 1]?.isOpen === false) {
     tileClick(x, y + 1);
   }
@@ -206,6 +208,11 @@ function checkArea(x, y) {
   }
 }
 
-const options = document.querySelector('.start');
+const options = document.querySelector('.start') as HTMLDialogElement;
 options.showModal();
-window.game=game
+declare global {
+  interface Window {
+    game: Function;
+  }
+}
+window.game = game;
